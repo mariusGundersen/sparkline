@@ -2,6 +2,8 @@
 
 [Sparklines](http://en.wikipedia.org/wiki/Sparkline) are tiny line graphs draws inline in the document. They are designed to present the overal trend in data without giving detailed information about a dataset. 
 
+![Screenshot of sparklines demo page](https://pbs.twimg.com/media/BcNNaEwCIAAIGIk.png:large)
+
 ## Installation
 
 Sparkline can be installed from bower and npm:

@@ -4,7 +4,7 @@
   "authors": [
     "Marius Gundersen <me@mariusgundersen.net>"
   ],
-  "description": "Tiny project for adding sparklines to your webapp",
+  "description": "Tiny project for drawing sparklines in your webapp",
   "main": "source/sparkline.js",
   "keywords": [
     "sparkline",
