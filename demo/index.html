@@ -7,6 +7,26 @@
   span{
     background: white;
   }
+
+
+  td{
+    text-align: center;
+  }
+  .today{
+    color: red;
+    font-weight: bold;
+  }
+  .minimum{
+    color: blue;
+    font-weight: bold;
+  }
+  .maximum{
+    color: green;
+    font-weight: bold;
+  }
+  .average{
+    font-weight: bold;
+  }
   </style>
 </head>
 <body>
@@ -16,19 +36,35 @@
     <span>Here is another sparkline: </span><span id="sparkline-2" class="sparkline"></span><br>
     <span>Move your mouse: </span><span id="sparkline-3" class="sparkline"></span>
   </div>
-
+  <br>
+  <br>
+  <table>
+    <thead>
+      <tr>
+        <th>Name
+        <th>Last week
+        <th>This week
+        <th>Today
+        <th>Minimum
+        <th>Average
+        <th>Maximum
+      </tr>
+    </thead>
+    <tbody id="currencies">
+    </tbody>
+  </table>
 
 
 
 <script src="sparkline.js"></script>
 <script>
 
-simple: {
+(function simple(){
   Sparkline.draw(document.getElementById("sparkline-1"), [10, 1, 2, 3, 4, 0, 7, 3, 8, 4, 9, 5, 10, 6]);
-}
+})();
 
 
-standard: {
+(function standard(){
 
   var elm = document.getElementById("sparkline-2");
 
@@ -48,9 +84,9 @@ standard: {
 
   sparkline.draw(arr);
 
-}
+})();
 
-dynamic: {
+(function dynamic(){
   var elm = document.getElementById("sparkline-3");
 
   var sparkline = new Sparkline(elm);
@@ -79,7 +115,41 @@ dynamic: {
 
     sparkline.draw(positions);
   }, false);
-}
+})();
+
+
+
+
+(function generate(){
+
+  var currencies = ["USD", "GBP", "EUR", "YEN", "NOK", "BTC"];
+
+  for(index in currencies){
+
+    var arr = [];
+    var max = Math.random()*50;
+    var min = Math.random()*100+50;
+    for(var i=0; i<100; i++){
+      arr[i] = ((Math.random() - Math.sin(min+i/50*Math.PI))*max + min).toFixed(1)*1;
+    }
+
+    var name = currencies[index];
+    var minimum = Math.min.apply(Math, arr);
+    var maximum = Math.max.apply(Math, arr);
+    var average = (arr.reduce(function(a, b){return a+b;}, 0)/arr.length).toFixed(1);
+
+
+    var row = document.createElement("tr");
+    row.innerHTML = "<td>"+name+"</td><td>"+arr[0]+"</td><td><span class='sparkline'></span></td><td class='today'>"+arr[arr.length-1]+"</td><td class='minimum'>"+minimum+"</td><td class='average'>"+average+"</td><td class='maximum'>"+maximum+"</td>";
+
+    var sparkline = new Sparkline(row.querySelector("span.sparkline"), {startColor:"red", width:200});
+
+    document.getElementById("currencies").appendChild(row);
+
+    sparkline.draw(arr);
+  }
+
+})();
 
 </script>
 </body>

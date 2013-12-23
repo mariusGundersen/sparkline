@@ -35,13 +35,13 @@
 
     Sparkline.options = {
         width: 100,
-        lineColor: "black",
+        lineColor: "#666",
         lineWidth: 1,
         startColor: "transparent",
         endColor: "red",
         maxColor: "green",
         minColor: "blue",
-        dotRadius: 2
+        dotRadius: 2.5
     };
 
     Sparkline.init = function(element, options){
@@ -80,8 +80,8 @@
 
         var minValue = Math.min.apply(Math, points);
         var maxValue = Math.max.apply(Math, points);
-        var minX = 0;
-        var maxX = 0;
+        var minX = offsetX;
+        var maxX = offsetX;
 
         var x = offsetX;
         var y = getY.bind(points, minValue, maxValue, offsetY, height);
@@ -90,10 +90,10 @@
         var dot = drawDot.bind(this.context, this.options.dotRadius);
 
 
-        this.context.lineStyle = this.options.lineColor;
+        this.context.beginPath();
+        this.context.strokeStyle = this.options.lineColor;
         this.context.lineWidth = this.options.lineWidth;
 
-        this.context.beginPath();
         this.context.moveTo(x, y(0));
         for(var i=1; i<points.length; i++){
             x += delta;
