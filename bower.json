@@ -1,0 +1,22 @@
+{
+  "name": "sparkline",
+  "version": "0.0.1",
+  "authors": [
+    "Marius Gundersen <me@mariusgundersen.net>"
+  ],
+  "description": "Tiny project for adding sparklines to your webapp",
+  "main": "dist/sparkline.js",
+  "keywords": [
+    "sparkline",
+    "sparklines"
+  ],
+  "license": "MIT",
+  "homepage": "http://lab.mariusgundersen.net/sparkline",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

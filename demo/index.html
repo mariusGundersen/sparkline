@@ -1,0 +1,44 @@
+<!doctype html>
+<hed>
+  <style>
+  .sparkline canvas{
+    vertical-align: text-bottom;
+  }
+  span{
+    background: white;
+  }
+  </style>
+</head>
+<body>
+
+  <div>
+    Here is a sparkline: <span id="sparkline-1" class="sparkline"></span><br>
+    <span>Here is another sparkline: </span><span id="sparkline-2" class="sparkline"></span>
+  </div>
+
+
+
+
+<script src="sparkline.js"></script>
+<script>
+var elm = document.getElementById("sparkline-1");
+
+var sparkline = Sparkline.init(elm);
+
+sparkline.draw([10, 1, 2, 3, 4, 0, 7, 3, 8, 4, 9, 5, 10, 6]);
+
+
+
+var elm = document.getElementById("sparkline-2");
+
+var sparkline = Sparkline.init(elm);
+
+var arr = [];
+for(var i=0; i<50; i++){
+  arr[i] = Math.random() - Math.sin(i/50*Math.PI);
+}
+
+sparkline.draw(arr);
+
+</script>
+</body>
