@@ -2,7 +2,7 @@
 
 [Sparklines](http://en.wikipedia.org/wiki/Sparkline) are tiny line graphs draws inline in the document. They are designed to present the overal trend in data without giving detailed information about a dataset. 
 
-![Screenshot of sparklines demo page](https://pbs.twimg.com/media/BcNNaEwCIAAIGIk.png:large)
+![Screenshot of sparklines demo page](https://raw.github.com/mariusGundersen/sparkline/master/demo/screenshot.png)
 
 ## Installation
 
@@ -32,7 +32,7 @@ sparkline1.draw([1,2,3,4,5]);
 sparkline2.draw([0.5,0.5,6,0.5]);
 ```
 
-More examples are available in the demo page in the repository
+[More examples](http://lab.mariusgundersen.net/sparklines/)
 
 ## Reference
 
