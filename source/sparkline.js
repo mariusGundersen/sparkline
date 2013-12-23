@@ -35,12 +35,12 @@
 
     Sparkline.options = {
         width: 100,
-        lineColor: "#666",
+        lineColor: "black",
         lineWidth: 1,
         startColor: "transparent",
         endColor: "red",
-        maxColor: "green",
-        minColor: "blue",
+        maxColor: "transparent",
+        minColor: "transparent",
         dotRadius: 2.5
     };
 

@@ -1,6 +1,13 @@
 <!doctype html>
-<hed>
+<head>
+  <title>Sparkline demo page</title>
   <style>
+
+  body{
+    width: 600px;
+    margin: 0 auto;
+  }
+
   .sparkline canvas{
     vertical-align: text-bottom;
   }
@@ -30,6 +37,8 @@
   </style>
 </head>
 <body>
+
+<h2>Sparkline Demo page</h2>
 
   <div>
     Here is a sparkline: <span id="sparkline-1" class="sparkline"></span><br>
@@ -69,6 +78,7 @@
   var elm = document.getElementById("sparkline-2");
 
   var sparkline = new Sparkline(elm, {
+    lineColor: "#666",
     startColor: "orange",
     endColor: "blue",
     maxColor: "red",
@@ -142,7 +152,7 @@
     var row = document.createElement("tr");
     row.innerHTML = "<td>"+name+"</td><td>"+arr[0]+"</td><td><span class='sparkline'></span></td><td class='today'>"+arr[arr.length-1]+"</td><td class='minimum'>"+minimum+"</td><td class='average'>"+average+"</td><td class='maximum'>"+maximum+"</td>";
 
-    var sparkline = new Sparkline(row.querySelector("span.sparkline"), {startColor:"red", width:200});
+    var sparkline = new Sparkline(row.querySelector("span.sparkline"), {startColor:"red", minColor:"blue", maxColor:"green", width:200, lineColor:"#666"});
 
     document.getElementById("currencies").appendChild(row);
 
