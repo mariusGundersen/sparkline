@@ -1,8 +1,8 @@
 {
-  "name": "sparkline",
-  "version": "0.0.1",
+  "name": "sparklines",
+  "version": "0.0.2",
   "description": "",
-  "main": "dist/sparkline.js",
+  "main": "source/sparkline.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
