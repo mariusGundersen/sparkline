@@ -13,7 +13,8 @@
 
   <div>
     Here is a sparkline: <span id="sparkline-1" class="sparkline"></span><br>
-    <span>Here is another sparkline: </span><span id="sparkline-2" class="sparkline"></span>
+    <span>Here is another sparkline: </span><span id="sparkline-2" class="sparkline"></span><br>
+    <span>Move your mouse: </span><span id="sparkline-3" class="sparkline"></span>
   </div>
 
 
@@ -21,24 +22,64 @@
 
 <script src="sparkline.js"></script>
 <script>
-var elm = document.getElementById("sparkline-1");
 
-var sparkline = Sparkline.init(elm);
-
-sparkline.draw([10, 1, 2, 3, 4, 0, 7, 3, 8, 4, 9, 5, 10, 6]);
-
-
-
-var elm = document.getElementById("sparkline-2");
-
-var sparkline = Sparkline.init(elm);
-
-var arr = [];
-for(var i=0; i<50; i++){
-  arr[i] = Math.random() - Math.sin(i/50*Math.PI);
+simple: {
+  Sparkline.draw(document.getElementById("sparkline-1"), [10, 1, 2, 3, 4, 0, 7, 3, 8, 4, 9, 5, 10, 6]);
 }
 
-sparkline.draw(arr);
+
+standard: {
+
+  var elm = document.getElementById("sparkline-2");
+
+  var sparkline = new Sparkline(elm, {
+    startColor: "orange",
+    endColor: "blue",
+    maxColor: "red",
+    minColor: "green",
+    dotRadius: 3,
+    width: 300
+  });
+
+  var arr = [];
+  for(var i=0; i<150; i++){
+    arr[i] = Math.random() - Math.sin(i/50*Math.PI);
+  }
+
+  sparkline.draw(arr);
+
+}
+
+dynamic: {
+  var elm = document.getElementById("sparkline-3");
+
+  var sparkline = new Sparkline(elm);
+
+  var prevX;
+  var prevY;
+  var positions = [];
+
+  sparkline.draw(positions);
+
+  document.addEventListener("mousemove", function(event){
+
+    prevX = prevX || event.clientX;
+    prevY = prevY || event.clientY;
+
+    var dx = event.clientX - prevX;
+    var dy = event.clientY - prevY;
+
+    prevX = event.clientX;
+    prevY = event.clientY;
+
+    positions.push(Math.sqrt(dx*dx + dy*dy));
+    if(positions.length > 100){
+      positions.shift();
+    }
+
+    sparkline.draw(positions);
+  }, false);
+}
 
 </script>
 </body>

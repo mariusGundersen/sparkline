@@ -37,7 +37,7 @@
         width: 100,
         lineColor: "black",
         lineWidth: 1,
-        startColor: "red",
+        startColor: "transparent",
         endColor: "red",
         maxColor: "green",
         minColor: "blue",
@@ -47,6 +47,12 @@
     Sparkline.init = function(element, options){
         return new Sparkline(element, options);
     };
+
+    Sparkline.draw = function(element, points, options){
+        var sparkline = new Sparkline(element, options);
+        sparkline.draw(points);
+        return sparkline;
+    }
 
     function getY(minValue, maxValue, offsetY, height, index){
         var range = maxValue - minValue;
