@@ -110,8 +110,8 @@
 
         dot(this.options.startColor, offsetX + (points.length == 1 ? width/2 : 0), y(0));
         dot(this.options.endColor, offsetX + (points.length == 1 ? width/2 : width), y(i - 1));
-        dot(this.options.minColor, minX, y(points.indexOf(minValue)));
-        dot(this.options.maxColor, maxX, y(points.indexOf(maxValue)));
+        dot(this.options.minColor, minX + (points.length == 1 ? width/2 : 0), y(points.indexOf(minValue)));
+        dot(this.options.maxColor, maxX + (points.length == 1 ? width/2 : 0), y(points.indexOf(maxValue)));
 
 
     }
