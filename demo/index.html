@@ -43,7 +43,9 @@
   <div>
     Here is a sparkline: <span id="sparkline-1" class="sparkline"></span><br>
     <span>Here is another sparkline: </span><span id="sparkline-2" class="sparkline"></span><br>
-    <span>Move your mouse: </span><span id="sparkline-3" class="sparkline"></span>
+    <span>Move your mouse: </span><span id="sparkline-3" class="sparkline"></span><br>
+    <span>This is a sparkline with only one value: </span><span id="sparkline-4" class="sparkline"></span><br>
+    <span>This is a sparkline with no values: </span><span id="sparkline-5" class="sparkline"></span>
   </div>
   <br>
   <br>
@@ -128,6 +130,13 @@
 })();
 
 
+(function oneValueOnly(){
+  Sparkline.draw(document.getElementById("sparkline-4"), [7]);
+})();
+
+(function noValuesAtAll(){
+  Sparkline.draw(document.getElementById("sparkline-5"), []);
+})();
 
 
 (function generate(){

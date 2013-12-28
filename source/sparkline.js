@@ -56,7 +56,11 @@
 
     function getY(minValue, maxValue, offsetY, height, index){
         var range = maxValue - minValue;
-        return (offsetY + height) - ((this[index] - minValue) / range)*height;
+        if(range == 0){
+          return offsetY + height/2;
+        }else{
+          return (offsetY + height) - ((this[index] - minValue) / range)*height;
+        }
     }
 
     function drawDot(radius, color, x, y){
@@ -104,8 +108,8 @@
         }
         this.context.stroke();
 
-        dot(this.options.startColor, offsetX, y(0));
-        dot(this.options.endColor, offsetX + width, y(i - 1));
+        dot(this.options.startColor, offsetX + (points.length == 1 ? width/2 : 0), y(0));
+        dot(this.options.endColor, offsetX + (points.length == 1 ? width/2 : width), y(i - 1));
         dot(this.options.minColor, minX, y(points.indexOf(minValue)));
         dot(this.options.maxColor, maxX, y(points.indexOf(maxValue)));
 

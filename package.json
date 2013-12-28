@@ -1,6 +1,6 @@
 {
   "name": "sparklines",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Tiny project for drawing sparklines in your webapp",
   "main": "source/sparkline.js",
   "scripts": {
