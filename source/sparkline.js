@@ -30,6 +30,7 @@
             this.element.innerHTML = "<canvas></canvas>";
             this.canvas = this.element.firstChild;
             this.context = this.canvas.getContext("2d");
+            this.ratio = window.devicePixelRatio || 1;
         }
     }
 
@@ -41,6 +42,8 @@
         endColor: "red",
         maxColor: "transparent",
         minColor: "transparent",
+        minValue: null,
+        maxValue: null,
         dotRadius: 2.5
     };
 
@@ -74,16 +77,21 @@
 
         points = points || [];
 
-        this.canvas.width = this.options.width;
-        this.canvas.height = this.element.offsetHeight;
+        var width = this.options.width;
+        var height = this.element.offsetHeight;
+        
+        this.canvas.width = width * this.ratio;
+        this.canvas.height = height * this.ratio;
+        this.canvas.style.width = width + 'px';
+        this.canvas.style.height = height + 'px';
 
         var offsetX = this.options.dotRadius;
         var offsetY = this.options.dotRadius;
         var width = this.canvas.width - offsetX - this.options.dotRadius;
         var height = this.canvas.height - offsetY - this.options.dotRadius;
 
-        var minValue = Math.min.apply(Math, points);
-        var maxValue = Math.max.apply(Math, points);
+        var minValue = this.options.minValue || Math.min.apply(Math, points);
+        var maxValue = this.options.maxValue || Math.max.apply(Math, points);
         var minX = offsetX;
         var maxX = offsetX;
 
