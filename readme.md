@@ -77,6 +77,8 @@ An object containing the default options for drawing a sparkline. This is shared
  * `endColor` (`"red"`): A string giving the color of the dot marking the last value. Any valid CSS color.
  * `maxColor` (`"transparent"`): A string giving the color of the dot marking the highest value. Any valid CSS color.
  * `minColor` (`"transparent"`): A string giving the color of the dot marking the lowest value. Any valid CSS color.
+ * `minValue` (`"null"`): A number giving the minimum y-axis value. By default, the lowest data value is used.
+ * `maxValue` (`"null"`): A number giving the maximum y-axis value. By default, the highest data value is used.
  * `dotRadius` (`2.5`): A number giving the size of the dots used to mark important values. 
 
 ### Instance methods
