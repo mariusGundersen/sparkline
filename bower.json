@@ -1,6 +1,6 @@
 {
   "name": "sparklines",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "authors": [
     "Marius Gundersen <me@mariusgundersen.net>"
   ],
@@ -19,7 +19,6 @@
     "bower_components",
     "test",
     "tests",
-    "demo",
-    "server.js"
+    "demo"
   ]
 }
