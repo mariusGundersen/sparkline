@@ -31,7 +31,7 @@
             this.canvas = this.element.firstChild;
             this.context = this.canvas.getContext("2d");
             this.ratio = window.devicePixelRatio || 1;
-            
+
             if(this.options.tooltip){
                 this.canvas.style.position = "relative";
                 this.canvas.onmousemove = showTooltip.bind(this);
@@ -78,12 +78,12 @@
         this.arc(x, y, radius, 0, Math.PI*2, false);
         this.fill();
     }
-  
+
     function showTooltip(e){
         var x = e.offsetX || e.layerX || 0;
         var delta = ((this.options.width - this.options.dotRadius*2) / (this.points.length - 1));
         var index = minmax(0, Math.round((x - this.options.dotRadius)/delta), this.points.length - 1);
-        
+
         this.canvas.title = this.options.tooltip(this.points[index], index, this.points);
     }
 
@@ -91,7 +91,7 @@
 
         points = points || [];
         this.points = points;
-        
+
         this.canvas.width = this.options.width * this.ratio;
         this.canvas.height = this.element.offsetHeight * this.ratio;
         this.canvas.style.width = this.options.width + 'px';
@@ -133,7 +133,7 @@
         dot(this.options.minColor, minX + (points.length == 1 ? width/2 : 0), y(points.indexOf(minValue)));
         dot(this.options.maxColor, maxX + (points.length == 1 ? width/2 : 0), y(points.indexOf(maxValue)));
     }
-    
+
     function minmax(a, b, c){
         return Math.max(a, Math.min(b, c));
     }
