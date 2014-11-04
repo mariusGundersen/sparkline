@@ -41,6 +41,7 @@
 
     Sparkline.options = {
         width: 100,
+        height: null,
         lineColor: "black",
         lineWidth: 1,
         startColor: "transparent",
@@ -93,9 +94,11 @@
         this.points = points;
 
         this.canvas.width = this.options.width * this.ratio;
-        this.canvas.height = this.element.offsetHeight * this.ratio;
         this.canvas.style.width = this.options.width + 'px';
-        this.canvas.style.height = this.element.offsetHeight + 'px';
+
+        var pxHeight = this.options.height || this.element.offsetHeight;
+        this.canvas.height = pxHeight * this.ratio;
+        this.canvas.style.height = pxHeight + 'px';
 
         var offsetX = this.options.dotRadius*this.ratio;
         var offsetY = this.options.dotRadius*this.ratio;
