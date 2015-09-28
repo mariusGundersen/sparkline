@@ -71,6 +71,7 @@ Draws the values as a sparkline on the given element, with the specified options
 An object containing the default options for drawing a sparkline. This is shared by all sparkline instances. Change the values of this object before creating sparkline instances. The options (with default values in parenthesis) available are:
 
  * `width` (`100`): A number giving the width of the sparkline box in pixels.
+ * `height` (`null`): A number giving the height of the sparkline box in pixels. By default, uses the height of the Canvas element.
  * `lineColor` (`"black"`): A string giving the color of the sparkline. Any valid CSS color, including RGB, HEX and HSV.
  * `lineWidth` (`1`): A number giving the stroke of the line in pixels.
  * `startColor` (`"transparent"`): A string giving the color of the dot marking the first value. Any valid CSS color.
@@ -79,7 +80,7 @@ An object containing the default options for drawing a sparkline. This is shared
  * `minColor` (`"transparent"`): A string giving the color of the dot marking the lowest value. Any valid CSS color.
  * `minValue` (`null`): A number giving the minimum y-axis value. By default, the lowest data value is used.
  * `maxValue` (`null`): A number giving the maximum y-axis value. By default, the highest data value is used.
- * `dotRadius` (`2.5`): A number giving the size of the dots used to mark important values. 
+ * `dotRadius` (`2.5`): A number giving the size of the dots used to mark important values.
  * `tooltip` (`null`): A function that takes three arguments (`value`, `index`, `array`) and returns a tooltip string to show when the user hovers over the sparkline. By default there is no tooltip.
 
 ### Instance methods
