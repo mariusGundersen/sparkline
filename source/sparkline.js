@@ -87,7 +87,7 @@
 
         this.canvas.title = this.options.tooltip(this.points[index], index, this.points);
     }
-
+    
     Sparkline.prototype.draw = function(points){
 
         points = points || [];
