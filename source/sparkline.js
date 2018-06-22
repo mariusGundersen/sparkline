@@ -88,11 +88,6 @@
         this.canvas.title = this.options.tooltip(this.points[index], index, this.points);
     }
     
-    Sparkline.prototype.update = function(points) {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.draw(points);
-    }
-
     Sparkline.prototype.draw = function(points){
 
         points = points || [];
