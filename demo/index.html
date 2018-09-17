@@ -47,7 +47,10 @@
     <span>This is a sparkline with only one value: </span><span id="sparkline-4" class="sparkline"></span><br>
     <span>This is a sparkline with no values: </span><span id="sparkline-5" class="sparkline"></span><br>
     <span>Look at this one, it has tooltip on hover: </span><span id="sparkline-6" class="sparkline"></span><br>
-    <span>And this one, with a custom height: </span><span id="sparkline-7" class="sparkline"></span>
+    <span>And this one, with a custom height: </span><span id="sparkline-7" class="sparkline"></span><br>
+    <span>This one has a fixed range, and tends to low values: </span><span id="sparkline-8" class="sparkline"></span><br>
+    <span>This one has a fixed range, and tends to high values: </span><span id="sparkline-9" class="sparkline"></span><br>
+    <span>Show the first value: </span><span id="sparkline-10" class="sparkline"></span>
   </div>
   <br>
   <br>
@@ -87,7 +90,7 @@
     endColor: "blue",
     maxColor: "red",
     minColor: "green",
-    dotRadius: 3,
+    //dotRadius: 3,
     width: 300
   });
 
@@ -150,8 +153,8 @@
     lineColor: "#666",
     maxColor: "green",
     minColor: "red",
-    dotRadius: 3,
-    width: 50,
+    //dotRadius: 3,
+    width: 100,
     tooltip: function(value, index, collection){
         return'1/'+(index+1)+' = '+value.toFixed(4);
     }
@@ -174,8 +177,8 @@
     lineColor: "#666",
     maxColor: "green",
     minColor: "red",
-    dotRadius: 3,
-    width: 50,
+    //dotRadius: 3,
+    width: 100,
     height: 30
   });
 
@@ -183,6 +186,95 @@
   for(var i=0; i<50; i++){
     arr.push(1/(i+1));
   }
+
+  sparkline.draw(arr);
+
+})();
+
+(function percentages(){
+
+  var elm = document.getElementById("sparkline-8");
+
+  var sparkline = new Sparkline(elm, {
+    lineColor: "#666",
+    //dotRadius: 3,
+    width: 100,
+    minValue: 0,
+    maxValue: 100,
+    tooltip: function(value){
+      return value.toFixed(0)+'%';
+    },
+    bottomLine: {
+      color: 'red'
+    }
+  });
+
+  var arr = [];
+  for(var i=0; i<10; i++){
+    arr.push(Math.random()*30);
+  }
+  arr.push(80);
+  arr.push(79);
+  for(var i=0; i<10; i++){
+    arr.push(Math.random()*30);
+  }
+
+  sparkline.draw(arr);
+
+})();
+
+(function experienceIndex(){
+
+  var elm = document.getElementById("sparkline-9");
+
+  var sparkline = new Sparkline(elm, {
+    lineColor: "#666",
+    //dotRadius: 3,
+    width: 100,
+    minValue: 0,
+    maxValue: 100,
+    tooltip: function(value){
+      return value.toFixed(0)+'%';
+    },
+    topLine: {
+      color: 'red'
+    }
+  });
+
+  var arr = [];
+  for(var i=0; i<10; i++){
+    arr.push(80+Math.random()*10);
+  }
+
+  sparkline.draw(arr);
+
+})();
+
+(function showStart(){
+
+  var elm = document.getElementById("sparkline-10");
+
+  var sparkline = new Sparkline(elm, {
+    lineColor: "#666",
+    //dotRadius: 3,
+    startColor: 'blue',
+    endColor: 'transparent',
+    width: 100,
+    tooltip: function(value){
+      return value.toFixed(0)+'%';
+    },
+    startLine: {
+      color: 'blue'
+    },
+    fillBelow: false
+  });
+
+  var arr = [];
+  for(var i=0; i<50; i++){
+    arr[i] = Math.random() - Math.cos(i/50*Math.PI);
+  }
+
+  console.log(arr);
 
   sparkline.draw(arr);
 

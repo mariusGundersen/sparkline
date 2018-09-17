@@ -1,145 +1,211 @@
 (function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(factory);
-    } else if (typeof exports === 'object') {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like enviroments that support module.exports,
-        // like Node.
-        module.exports = factory();
-    } else {
-        // Browser globals (root is window)
-        root.Sparkline = factory();
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(factory);
+  } else if (typeof exports === 'object') {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like enviroments that support module.exports,
+    // like Node.
+    module.exports = factory();
+  } else {
+    // Browser globals (root is window)
+    root.Sparkline = factory();
   }
-}(this, function () {
+}(window, function () {
+  function extend(specific, general) {
+    var obj = {};
+    for (var key in general) {
+      obj[key] = key in specific ? specific[key] : general[key];
+    }
+    return obj;
+  }
 
+  function Sparkline(element, options) {
+    this.element = element;
+    this.options = extend(options || {}, Sparkline.options);
 
-    function extend(specific, general){
-        var obj = {};
-        for(var key in general){
-            obj[key] = key in specific ? specific[key] : general[key];
-        }
-        return obj;
+    init: {
+      this.element.innerHTML = "<canvas></canvas>";
+      this.canvas = this.element.firstChild;
+      this.context = this.canvas.getContext("2d");
+      this.ratio = window.devicePixelRatio || 1;
+
+      if (this.options.tooltip) {
+        this.canvas.style.position = "relative";
+        this.canvas.onmousemove = showTooltip.bind(this);
+      }
+    }
+  }
+
+  Sparkline.options = {
+    width: 100,
+    height: null,
+    lineColor: "black",
+    lineWidth: 1.5,
+    startColor: "transparent",
+    endColor: "black",
+    maxColor: "transparent",
+    minColor: "transparent",
+    minValue: null,
+    maxValue: null,
+    dotRadius: 2.5,
+    tooltip: null,
+    fillBelow: true,
+    fillLighten: 0.5,
+    startLine: false,
+    endLine: false,
+    minLine: false,
+    maxLine: false,
+    bottomLine: false,
+    topLine: false,
+    averageLine: false
+  };
+
+  Sparkline.init = function (element, options) {
+    return new Sparkline(element, options);
+  };
+
+  Sparkline.draw = function (element, points, options) {
+    var sparkline = new Sparkline(element, options);
+    sparkline.draw(points);
+    return sparkline;
+  }
+
+  function getY(minValue, maxValue, offsetY, height, index) {
+    var range = maxValue - minValue;
+    if (range == 0) {
+      return offsetY + height / 2;
+    } else {
+      return (offsetY + height) - ((this[index] - minValue) / range) * height;
+    }
+  }
+
+  function drawDot(radius, color, x, y) {
+    this.beginPath();
+    this.fillStyle = color;
+    this.arc(x, y, radius, 0, Math.PI * 2, false);
+    this.fill();
+  }
+
+  function drawLine(x1, x2, style, y){
+    if(!style) return;
+
+    this.context.save();
+    this.context.strokeStyle = style.color || 'black';
+    this.context.lineWidth = (style.width || 1) * this.ratio;
+    this.context.globalAlpha = style.alpha || 1;
+    this.context.beginPath();
+    this.context.moveTo(x1, y);
+    this.context.lineTo(x2, y);
+    this.context.stroke();
+    this.context.restore();
+  }
+
+  function showTooltip(e) {
+    var x = e.offsetX || e.layerX || 0;
+    var delta = ((this.options.width - this.options.dotRadius * 2) / (this.points.length - 1));
+    var index = minmax(0, Math.round((x - this.options.dotRadius) / delta), this.points.length - 1);
+
+    this.canvas.title = this.options.tooltip(this.points[index], index, this.points);
+  }
+
+  Sparkline.prototype.draw = function (points) {
+
+    points = points || [];
+    this.points = points;
+
+    this.canvas.width = this.options.width * this.ratio;
+    this.canvas.style.width = this.options.width + 'px';
+
+    var pxHeight = this.options.height || this.element.offsetHeight;
+    this.canvas.height = pxHeight * this.ratio;
+    this.canvas.style.height = pxHeight + 'px';
+
+    var lineWidth = this.options.lineWidth * this.ratio;
+    var offsetX = Math.max(this.options.dotRadius * this.ratio, lineWidth/2);
+    var offsetY = Math.max(this.options.dotRadius * this.ratio, lineWidth/2);
+    var width = this.canvas.width - offsetX * 2;
+    var height = this.canvas.height - offsetY * 2;
+
+    var minValue = Math.min.apply(Math, points);
+    var maxValue = Math.max.apply(Math, points);
+    var bottomValue = this.options.minValue != undefined ? this.options.minValue : minValue;
+    var topValue = this.options.maxValue != undefined ? this.options.maxValue : maxValue;
+    var minX = offsetX;
+    var maxX = offsetX;
+
+    var x = offsetX;
+    var y = getY.bind(points, bottomValue, topValue, offsetY, height);
+    var delta = width / (points.length - 1);
+
+    var dot = drawDot.bind(this.context, this.options.dotRadius * this.ratio);
+    var line = drawLine.bind(this, offsetX, width + offsetX);
+
+    this.context.save();
+
+    this.context.strokeStyle = this.options.lineColor;
+    this.context.fillStyle = this.options.lineColor;
+    this.context.lineWidth = lineWidth;
+    this.context.lineCap = 'round';
+    this.context.lineJoin = 'round';
+
+    if(this.options.fillBelow && points.length > 1){
+      this.context.save();
+      this.context.beginPath();
+      this.context.moveTo(x, y(0));
+      for (var i = 1; i < points.length; i++) {
+        x += delta;
+
+        minX = points[i] == minValue ? x : minX;
+        maxX = points[i] == maxValue ? x : maxX;
+
+        this.context.lineTo(x, y(i));
+      }
+      this.context.lineTo(width+offsetX, height + offsetY + lineWidth/2);
+      this.context.lineTo(offsetX, height + offsetY + lineWidth/2);
+      this.context.fill();
+      if(this.options.fillLighten > 0){
+        this.context.fillStyle = 'white';
+        this.context.globalAlpha = this.options.fillLighten;
+        this.context.fill();
+        this.context.globalAlpha = 1;
+      }else if(this.options.fillLighten < 0){
+        this.context.fillStyle = 'black';
+        this.context.globalAlpha = -this.options.fillLighten;
+        this.context.fill();
+      }
+      this.context.restore();
     }
 
-    function Sparkline(element, options){
-        this.element = element;
-        this.options = extend(options || {}, Sparkline.options);
-
-        init: {
-            this.element.innerHTML = "<canvas></canvas>";
-            this.canvas = this.element.firstChild;
-            this.context = this.canvas.getContext("2d");
-            this.ratio = window.devicePixelRatio || 1;
-
-            if(this.options.tooltip){
-                this.canvas.style.position = "relative";
-                this.canvas.onmousemove = showTooltip.bind(this);
-            }
-        }
+    x = offsetX;
+    this.context.beginPath();
+    this.context.moveTo(x, y(0));
+    for (var i = 1; i < points.length; i++) {
+      x += delta;
+      this.context.lineTo(x, y(i));
     }
+    this.context.stroke();
 
-    Sparkline.options = {
-        width: 100,
-        height: null,
-        lineColor: "black",
-        lineWidth: 1,
-        startColor: "transparent",
-        endColor: "red",
-        maxColor: "transparent",
-        minColor: "transparent",
-        minValue: null,
-        maxValue: null,
-        dotRadius: 2.5,
-        tooltip: null
-    };
+    this.context.restore();
 
-    Sparkline.init = function(element, options){
-        return new Sparkline(element, options);
-    };
+    line(this.options.bottomLine, offsetY);
+    line(this.options.topLine, height + offsetY+lineWidth/2);
 
-    Sparkline.draw = function(element, points, options){
-        var sparkline = new Sparkline(element, options);
-        sparkline.draw(points);
-        return sparkline;
-    }
+    line(this.options.startLine, y(0));
+    dot(this.options.startColor, offsetX + (points.length == 1 ? width / 2 : 0), y(0));
+    line(this.options.endLine, y(points.length-1));
+    dot(this.options.endColor, offsetX + (points.length == 1 ? width / 2 : width), y(points.length-1));
+    line(this.options.minLine, y(points.indexOf(minValue)));
+    dot(this.options.minColor, minX + (points.length == 1 ? width / 2 : 0), y(points.indexOf(minValue)));
+    line(this.options.maxLine, y(points.indexOf(maxValue)));
+    dot(this.options.maxColor, maxX + (points.length == 1 ? width / 2 : 0), y(points.indexOf(maxValue)));
 
-    function getY(minValue, maxValue, offsetY, height, index){
-        var range = maxValue - minValue;
-        if(range == 0){
-          return offsetY + height/2;
-        }else{
-          return (offsetY + height) - ((this[index] - minValue) / range)*height;
-        }
-    }
+    //line(this.options.averageLine, )
+  }
 
-    function drawDot(radius, color, x, y){
-        this.beginPath();
-        this.fillStyle = color;
-        this.arc(x, y, radius, 0, Math.PI*2, false);
-        this.fill();
-    }
+  function minmax(a, b, c) {
+    return Math.max(a, Math.min(b, c));
+  }
 
-    function showTooltip(e){
-        var x = e.offsetX || e.layerX || 0;
-        var delta = ((this.options.width - this.options.dotRadius*2) / (this.points.length - 1));
-        var index = minmax(0, Math.round((x - this.options.dotRadius)/delta), this.points.length - 1);
-
-        this.canvas.title = this.options.tooltip(this.points[index], index, this.points);
-    }
-
-    Sparkline.prototype.draw = function(points){
-
-        points = points || [];
-        this.points = points;
-
-        this.canvas.width = this.options.width * this.ratio;
-        this.canvas.style.width = this.options.width + 'px';
-
-        var pxHeight = this.options.height || this.element.offsetHeight;
-        this.canvas.height = pxHeight * this.ratio;
-        this.canvas.style.height = pxHeight + 'px';
-
-        var offsetX = this.options.dotRadius*this.ratio;
-        var offsetY = this.options.dotRadius*this.ratio;
-        var width = this.canvas.width - offsetX*2;
-        var height = this.canvas.height - offsetY*2;
-
-        var minValue = this.options.minValue || Math.min.apply(Math, points);
-        var maxValue = this.options.maxValue || Math.max.apply(Math, points);
-        var minX = offsetX;
-        var maxX = offsetX;
-
-        var x = offsetX;
-        var y = getY.bind(points, minValue, maxValue, offsetY, height);
-        var delta = width / (points.length - 1);
-
-        var dot = drawDot.bind(this.context, this.options.dotRadius*this.ratio);
-
-
-        this.context.beginPath();
-        this.context.strokeStyle = this.options.lineColor;
-        this.context.lineWidth = this.options.lineWidth*this.ratio;
-
-        this.context.moveTo(x, y(0));
-        for(var i=1; i<points.length; i++){
-            x += delta;
-            this.context.lineTo(x, y(i));
-
-            minX = points[i] == minValue ? x : minX;
-            maxX = points[i] == maxValue ? x : maxX;
-        }
-        this.context.stroke();
-
-        dot(this.options.startColor, offsetX + (points.length == 1 ? width/2 : 0), y(0));
-        dot(this.options.endColor, offsetX + (points.length == 1 ? width/2 : width), y(i - 1));
-        dot(this.options.minColor, minX + (points.length == 1 ? width/2 : 0), y(points.indexOf(minValue)));
-        dot(this.options.maxColor, maxX + (points.length == 1 ? width/2 : 0), y(points.indexOf(maxValue)));
-    }
-
-    function minmax(a, b, c){
-        return Math.max(a, Math.min(b, c));
-    }
-
-    return Sparkline;
+  return Sparkline;
 }));
