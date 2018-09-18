@@ -46,6 +46,7 @@
     <span>Move your mouse: </span><span id="sparkline-3" class="sparkline"></span><br>
     <span>This is a sparkline with only one value: </span><span id="sparkline-4" class="sparkline"></span><br>
     <span>This is a sparkline with no values: </span><span id="sparkline-5" class="sparkline"></span><br>
+    <span>This is a sparkline with all same values: </span><span id="sparkline-5b" class="sparkline"></span><br>
     <span>Look at this one, it has tooltip on hover: </span><span id="sparkline-6" class="sparkline"></span><br>
     <span>And this one, with a custom height: </span><span id="sparkline-7" class="sparkline"></span><br>
     <span>This one has a fixed range, and tends to low values: </span><span id="sparkline-8" class="sparkline"></span><br>
@@ -141,6 +142,10 @@
 
 (function noValuesAtAll(){
   Sparkline.draw(document.getElementById("sparkline-5"), []);
+})();
+
+(function allSameValues(){
+  Sparkline.draw(document.getElementById("sparkline-5b"), [0, 0, 0, 0, 0, 0, 0, 0], {minMaxValue: 10, minValue: 0});
 })();
 
 
@@ -302,7 +307,7 @@
     var row = document.createElement("tr");
     row.innerHTML = "<td>"+name+"</td><td>"+arr[0]+"</td><td><span class='sparkline'></span></td><td class='today'>"+arr[arr.length-1]+"</td><td class='minimum'>"+minimum+"</td><td class='average'>"+average+"</td><td class='maximum'>"+maximum+"</td>";
 
-    var sparkline = new Sparkline(row.querySelector("span.sparkline"), {startColor:"red", minColor:"blue", maxColor:"green", width:200, lineColor:"#666"});
+    var sparkline = new Sparkline(row.querySelector("span.sparkline"), {startColor:"red", minColor:"blue", maxColor:"green", width:200, lineColor:"#666", maxLine: {color:'green', direction: 'right'}});
 
     document.getElementById("currencies").appendChild(row);
 

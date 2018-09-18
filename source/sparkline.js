@@ -48,6 +48,8 @@
     minColor: "transparent",
     minValue: null,
     maxValue: null,
+    minMaxValue: null,
+    maxMinValue: null,
     dotRadius: 2.5,
     tooltip: null,
     fillBelow: true,
@@ -80,14 +82,15 @@
     }
   }
 
-  function drawDot(radius, color, x, y) {
-    this.beginPath();
-    this.fillStyle = color;
-    this.arc(x, y, radius, 0, Math.PI * 2, false);
-    this.fill();
+  function drawDot(radius, x1, x2, color, line, x, y) {
+    this.context.beginPath();
+    this.context.fillStyle = color;
+    this.context.arc(x, y, radius, 0, Math.PI * 2, false);
+    this.context.fill();
+    drawLine.call(this, x1, x2, line, x, y);
   }
 
-  function drawLine(x1, x2, style, y){
+  function drawLine(x1, x2, style, x, y){
     if(!style) return;
 
     this.context.save();
@@ -95,8 +98,8 @@
     this.context.lineWidth = (style.width || 1) * this.ratio;
     this.context.globalAlpha = style.alpha || 1;
     this.context.beginPath();
-    this.context.moveTo(x1, y);
-    this.context.lineTo(x2, y);
+    this.context.moveTo(style.direction != 'right' ? x1 : x, y);
+    this.context.lineTo(style.direction != 'left' ? x2 : x, y);
     this.context.stroke();
     this.context.restore();
   }
@@ -129,8 +132,8 @@
 
     var minValue = Math.min.apply(Math, points);
     var maxValue = Math.max.apply(Math, points);
-    var bottomValue = this.options.minValue != undefined ? this.options.minValue : minValue;
-    var topValue = this.options.maxValue != undefined ? this.options.maxValue : maxValue;
+    var bottomValue = this.options.minValue != undefined ? this.options.minValue : Math.min(minValue, this.options.maxMinValue != undefined ? this.options.maxMinValue : minValue);
+    var topValue = this.options.maxValue != undefined ? this.options.maxValue : Math.max(maxValue, this.options.minMaxValue != undefined ? this.options.minMaxValue : maxValue);
     var minX = offsetX;
     var maxX = offsetX;
 
@@ -138,7 +141,7 @@
     var y = getY.bind(points, bottomValue, topValue, offsetY, height);
     var delta = width / (points.length - 1);
 
-    var dot = drawDot.bind(this.context, this.options.dotRadius * this.ratio);
+    var dot = drawDot.bind(this, this.options.dotRadius * this.ratio, offsetX, width + offsetX);
     var line = drawLine.bind(this, offsetX, width + offsetX);
 
     this.context.save();
@@ -188,17 +191,13 @@
 
     this.context.restore();
 
-    line(this.options.bottomLine, offsetY);
-    line(this.options.topLine, height + offsetY+lineWidth/2);
+    line(this.options.bottomLine, 0, offsetY);
+    line(this.options.topLine, 0, height + offsetY+lineWidth/2);
 
-    line(this.options.startLine, y(0));
-    dot(this.options.startColor, offsetX + (points.length == 1 ? width / 2 : 0), y(0));
-    line(this.options.endLine, y(points.length-1));
-    dot(this.options.endColor, offsetX + (points.length == 1 ? width / 2 : width), y(points.length-1));
-    line(this.options.minLine, y(points.indexOf(minValue)));
-    dot(this.options.minColor, minX + (points.length == 1 ? width / 2 : 0), y(points.indexOf(minValue)));
-    line(this.options.maxLine, y(points.indexOf(maxValue)));
-    dot(this.options.maxColor, maxX + (points.length == 1 ? width / 2 : 0), y(points.indexOf(maxValue)));
+    dot(this.options.startColor, this.options.startLine, offsetX + (points.length == 1 ? width / 2 : 0), y(0));
+    dot(this.options.endColor, this.options.endLine, offsetX + (points.length == 1 ? width / 2 : width), y(points.length-1));
+    dot(this.options.minColor, this.options.minLine, minX + (points.length == 1 ? width / 2 : 0), y(points.indexOf(minValue)));
+    dot(this.options.maxColor, this.options.maxLine, maxX + (points.length == 1 ? width / 2 : 0), y(points.indexOf(maxValue)));
 
     //line(this.options.averageLine, )
   }
