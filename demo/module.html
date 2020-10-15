@@ -40,12 +40,6 @@
 
 <h2>Sparkline Demo page</h2>
 
-  <ul>
-    <li><a href="https://github.com/mariusGundersen/sparkline">Source code on GitHub</a>
-    <li><a href="https://www.npmjs.com/package/sparklines">npm package</a>
-  </ul>
-
-
   <div>
     Here is a sparkline: <span id="sparkline-1" class="sparkline"></span><br>
     <span>Here is another sparkline: </span><span id="sparkline-2" class="sparkline"></span><br>
@@ -79,8 +73,8 @@
 
 
 
-<script src="sparkline.js"></script>
-<script>
+<script type="module">
+  import Sparkline from './sparkline.mjs';
 
 (function simple(){
   Sparkline.draw(document.getElementById("sparkline-1"), [10, 1, 2, 3, 4, 0, 7, 3, 8, 4, 9, 5, 10, 6]);
@@ -89,9 +83,9 @@
 
 (function standard(){
 
-  var elm = document.getElementById("sparkline-2");
+  const elm = document.getElementById("sparkline-2");
 
-  var sparkline = new Sparkline(elm, {
+  const sparkline = new Sparkline(elm, {
     lineColor: "#666",
     startColor: "orange",
     endColor: "blue",
@@ -101,8 +95,8 @@
     width: 300
   });
 
-  var arr = [];
-  for(var i=0; i<150; i++){
+  const arr = [];
+  for(let i=0; i<150; i++){
     arr[i] = Math.random() - Math.sin(i/50*Math.PI);
   }
 
@@ -111,13 +105,13 @@
 })();
 
 (function dynamic(){
-  var elm = document.getElementById("sparkline-3");
+  const elm = document.getElementById("sparkline-3");
 
-  var sparkline = new Sparkline(elm);
+  const sparkline = new Sparkline(elm);
 
-  var prevX;
-  var prevY;
-  var positions = [];
+  let prevX;
+  let prevY;
+  const positions = [];
 
   sparkline.draw(positions);
 
@@ -126,8 +120,8 @@
     prevX = prevX || event.clientX;
     prevY = prevY || event.clientY;
 
-    var dx = event.clientX - prevX;
-    var dy = event.clientY - prevY;
+    const dx = event.clientX - prevX;
+    const dy = event.clientY - prevY;
 
     prevX = event.clientX;
     prevY = event.clientY;
@@ -158,9 +152,9 @@
 
 (function tooltip(){
 
-  var elm = document.getElementById("sparkline-6");
+  const elm = document.getElementById("sparkline-6");
 
-  var sparkline = new Sparkline(elm, {
+  const sparkline = new Sparkline(elm, {
     lineColor: "#666",
     maxColor: "green",
     minColor: "red",
@@ -171,8 +165,8 @@
     }
   });
 
-  var arr = [];
-  for(var i=0; i<50; i++){
+  const arr = [];
+  for(let i=0; i<50; i++){
     arr.push(1/(i+1));
   }
 
@@ -182,9 +176,9 @@
 
 (function customHeight(){
 
-  var elm = document.getElementById("sparkline-7");
+  const elm = document.getElementById("sparkline-7");
 
-  var sparkline = new Sparkline(elm, {
+  const sparkline = new Sparkline(elm, {
     lineColor: "#666",
     maxColor: "green",
     minColor: "red",
@@ -193,8 +187,8 @@
     height: 30
   });
 
-  var arr = [];
-  for(var i=0; i<50; i++){
+  const arr = [];
+  for(let i=0; i<50; i++){
     arr.push(1/(i+1));
   }
 
@@ -204,9 +198,9 @@
 
 (function percentages(){
 
-  var elm = document.getElementById("sparkline-8");
+  const elm = document.getElementById("sparkline-8");
 
-  var sparkline = new Sparkline(elm, {
+  const sparkline = new Sparkline(elm, {
     lineColor: "#666",
     //dotRadius: 3,
     width: 100,
@@ -220,13 +214,13 @@
     }
   });
 
-  var arr = [];
-  for(var i=0; i<10; i++){
+  const arr = [];
+  for(let i=0; i<10; i++){
     arr.push(Math.random()*30);
   }
   arr.push(80);
   arr.push(79);
-  for(var i=0; i<10; i++){
+  for(let i=0; i<10; i++){
     arr.push(Math.random()*30);
   }
 
@@ -236,9 +230,9 @@
 
 (function experienceIndex(){
 
-  var elm = document.getElementById("sparkline-9");
+  const elm = document.getElementById("sparkline-9");
 
-  var sparkline = new Sparkline(elm, {
+  const sparkline = new Sparkline(elm, {
     lineColor: "#666",
     //dotRadius: 3,
     width: 100,
@@ -252,8 +246,8 @@
     }
   });
 
-  var arr = [];
-  for(var i=0; i<10; i++){
+  const arr = [];
+  for(let i=0; i<10; i++){
     arr.push(80+Math.random()*10);
   }
 
@@ -263,9 +257,9 @@
 
 (function showStart(){
 
-  var elm = document.getElementById("sparkline-10");
+  const elm = document.getElementById("sparkline-10");
 
-  var sparkline = new Sparkline(elm, {
+  const sparkline = new Sparkline(elm, {
     lineColor: "#666",
     //dotRadius: 3,
     startColor: 'blue',
@@ -280,8 +274,8 @@
     fillBelow: false
   });
 
-  var arr = [];
-  for(var i=0; i<50; i++){
+  const arr = [];
+  for(let i=0; i<50; i++){
     arr[i] = Math.random() - Math.cos(i/50*Math.PI);
   }
 
@@ -291,27 +285,26 @@
 
 (function generate(){
 
-  var currencies = ["USD", "GBP", "EUR", "YEN", "NOK", "BTC"];
+  const currencies = ["USD", "GBP", "EUR", "YEN", "NOK", "BTC"];
 
-  for(index in currencies){
+  for(let name of currencies){
 
-    var arr = [];
-    var max = Math.random()*50;
-    var min = Math.random()*100+50;
-    for(var i=0; i<100; i++){
+    const arr = [];
+    const max = Math.random()*50;
+    const min = Math.random()*100+50;
+    for(let i=0; i<100; i++){
       arr[i] = ((Math.random() - Math.sin(min+i/50*Math.PI))*max + min).toFixed(1)*1;
     }
 
-    var name = currencies[index];
-    var minimum = Math.min.apply(Math, arr);
-    var maximum = Math.max.apply(Math, arr);
-    var average = (arr.reduce(function(a, b){return a+b;}, 0)/arr.length).toFixed(1);
+    const minimum = Math.min.apply(Math, arr);
+    const maximum = Math.max.apply(Math, arr);
+    const average = (arr.reduce(function(a, b){return a+b;}, 0)/arr.length).toFixed(1);
 
 
-    var row = document.createElement("tr");
+    const row = document.createElement("tr");
     row.innerHTML = "<td>"+name+"</td><td>"+arr[0]+"</td><td><span class='sparkline'></span></td><td class='today'>"+arr[arr.length-1]+"</td><td class='minimum'>"+minimum+"</td><td class='average'>"+average+"</td><td class='maximum'>"+maximum+"</td>";
 
-    var sparkline = new Sparkline(row.querySelector("span.sparkline"), {startColor:"red", minColor:"blue", maxColor:"green", width:200, lineColor:"#666", maxLine: {color:'green', direction: 'right'}});
+    const sparkline = new Sparkline(row.querySelector("span.sparkline"), {startColor:"red", minColor:"blue", maxColor:"green", width:200, lineColor:"#666", maxLine: {color:'green', direction: 'right'}});
 
     document.getElementById("currencies").appendChild(row);
 
